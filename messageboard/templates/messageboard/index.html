@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Django 留言板</title>
+</head>
+<body>
+    <h1>留言板</h1>
+    <form method="post">
+        {% csrf_token %}
+        <input type="text" name="content" required>
+        <button type="submit">提交</button>
+    </form>
+    <ul>
+        {% for msg in messages %}
+            <li>{{ msg.content }} ({{ msg.created_at }})</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
