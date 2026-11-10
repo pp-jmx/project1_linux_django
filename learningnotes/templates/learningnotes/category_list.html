@@ -1,0 +1,26 @@
+{% extends 'learningnotes/base.html' %}
+{% comment %}
+  category_list.html —— 分类列表（CBV: CategoryListView）
+  上下文：categories（带 note_count 注解）/ total_notes / page_obj
+{% endcomment %}
+
+{% block title %}分类列表{% endblock %}
+
+{% block content %}
+  <h1>分类</h1>
+  <p class="muted">共 {{ total_notes }} 篇已发布笔记</p>
+
+  <ul class="card">
+    {% for category in categories %}
+      <li>
+        <a href="{% url 'learningnotes:category_detail' category.pk %}">{{ category.name }}</a>
+        {# note_count 来自 CategoryListView.get_queryset 的 annotate(Count('notes')) #}
+        <span class="badge">{{ category.note_count }} 篇</span>
+      </li>
+    {% empty %}
+      <li class="muted">暂无分类</li>
+    {% endfor %}
+  </ul>
+
+  {% include 'learningnotes/_pagination.html' %}
+{% endblock %}

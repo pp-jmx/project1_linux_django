@@ -1,0 +1,22 @@
+{% comment %}
+============================================================================
+  _pagination.html —— 可复用的分页片段（include）
+============================================================================
+视图用 Paginator 分页后把 page_obj 传进来，这里渲染“上一页/页码/下一页”。
+
+关键技巧：保留当前的查询参数（如 ?q=xxx&category=2），翻页时只替换 page，
+否则搜索/筛选条件会在翻页后丢失。
+{% endcomment %}
+{% if page_obj.paginator.num_pages > 1 %}
+  <nav class="pagination">
+    {% if page_obj.has_previous %}
+      <a href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ page_obj.previous_page_number }}">上一页</a>
+    {% endif %}
+
+    <span class="current">第 {{ page_obj.number }} / {{ page_obj.paginator.num_pages }} 页</span>
+
+    {% if page_obj.has_next %}
+      <a href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ page_obj.next_page_number }}">下一页</a>
+    {% endif %}
+  </nav>
+{% endif %}

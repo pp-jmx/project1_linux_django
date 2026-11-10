@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Django
+*.log
+media/          # 用户上传的文件（Attachment.file 会落到这里）
+# db.sqlite3    # 已随初始提交进入版本库，如需不跟踪可取消注释并 git rm --cached db.sqlite3
+
+# 虚拟环境（venv 自带 .gitignore 已忽略自身，这里再兜底）
+venv/
+.venv/
+
+# 编辑器 / 系统
+.idea/
+.vscode/
+.DS_Store

@@ -1,0 +1,21 @@
+{% extends 'learningnotes/base.html' %}
+{% comment %}
+  category_detail.html —— 分类详情（CBV: CategoryDetailView）
+  上下文：category / notes（该分类下最近 10 篇已发布笔记）
+{% endcomment %}
+
+{% block title %}{{ category.name }}{% endblock %}
+
+{% block content %}
+  <h1>{{ category.name }}</h1>
+  <p class="muted">{{ category.description|default:"（暂无描述）" }}</p>
+
+  <h2>该分类下的笔记</h2>
+  <ul>
+    {% for note in notes %}
+      <li><a href="{{ note.get_absolute_url }}">{{ note.title }}</a></li>
+    {% empty %}
+      <li class="muted">该分类下还没有已发布的笔记。</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

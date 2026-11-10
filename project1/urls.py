@@ -14,11 +14,25 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path,include
+from django.urls import path, include
 
 urlpatterns = [
+    # 后台管理：Django 自带，几乎零配置
     path('admin/', admin.site.urls),
+
+    # 留言板（最小示例，保持原样）
     path('', include('messageboard.urls')),
+
+    # 学习笔记（本次补充的核心应用）
+    # learningnotes/urls.py 里声明了 app_name='learningnotes'，
+    # include 后自动形成命名空间，反向解析必须写 'learningnotes:xxx'。
+    path('learning/', include('learningnotes.urls')),
 ]
+
+# 开发环境由 Django 负责提供用户上传的媒体文件（生产环境应交给 Nginx 等）
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

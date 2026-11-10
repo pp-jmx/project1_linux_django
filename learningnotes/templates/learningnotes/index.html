@@ -1,0 +1,38 @@
+{% extends 'learningnotes/base.html' %}
+{% comment %}
+  index.html —— 首页：展示统计 + 最新 + 热门
+  上下文（由 views.index 提供）：stats / latest_notes / popular_notes
+{% endcomment %}
+
+{% block title %}首页 · 学习笔记{% endblock %}
+
+{% block content %}
+  <h1>学习笔记</h1>
+
+  <div class="card">
+    <p>
+      已发布笔记 <strong>{{ stats.total_notes }}</strong> 篇 ·
+      分类 <strong>{{ stats.total_categories }}</strong> 个 ·
+      标签 <strong>{{ stats.total_tags }}</strong> 个
+    </p>
+  </div>
+
+  <h2>最新笔记</h2>
+  {% for note in latest_notes %}
+    <article class="card">
+      <h3 style="margin:0"><a href="{{ note.get_absolute_url }}">{{ note.title }}</a></h3>
+      <p class="meta">{{ note.category.name }} · {{ note.created_at|date:"Y-m-d" }} · 浏览 {{ note.view_count }}</p>
+    </article>
+  {% empty %}
+    <p class="muted">还没有笔记，先去“写笔记”或到 <a href="/admin/">后台</a> 添加吧。</p>
+  {% endfor %}
+
+  <h2>热门笔记</h2>
+  <ul>
+    {% for note in popular_notes %}
+      <li><a href="{{ note.get_absolute_url }}">{{ note.title }}</a>（{{ note.view_count }} 次浏览）</li>
+    {% empty %}
+      <li class="muted">暂无数据</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

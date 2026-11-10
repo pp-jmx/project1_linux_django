@@ -1,0 +1,20 @@
+{% extends 'learningnotes/base.html' %}
+{% comment %}
+  note_confirm_delete.html —— 删除确认页
+  被 views.note_delete(FBV) 和 NoteDeleteView(CBV) 使用；上下文：note
+  删除属于危险操作，用 POST 提交（配合 CSRF），不要用 GET 直接删。
+{% endcomment %}
+
+{% block title %}删除笔记{% endblock %}
+
+{% block content %}
+  <h1>确认删除</h1>
+  <div class="card">
+    <p>确定要删除笔记《{{ note.title }}》吗？此操作不可撤销。</p>
+    <form method="post">
+      {% csrf_token %}
+      <button type="submit" class="danger">确认删除</button>
+      <a class="btn" href="{{ note.get_absolute_url }}">取消</a>
+    </form>
+  </div>
+{% endblock %}

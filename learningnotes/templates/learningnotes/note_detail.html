@@ -1,0 +1,43 @@
+{% extends 'learningnotes/base.html' %}
+{% comment %}
+  note_detail.html —— 笔记详情（FBV: views.note_detail）
+  上下文：note / related_notes
+  演示：外键访问(note.category.name)、多对多循环、linebreaks 过滤器
+{% endcomment %}
+
+{% block title %}{{ note.title }}{% endblock %}
+
+{% block content %}
+  <article class="card">
+    <h1 style="margin-top:0">{{ note.title }}</h1>
+    <p class="meta">
+      分类：<a href="{% url 'learningnotes:category_detail' note.category.pk %}">{{ note.category.name }}</a>
+      · 作者：{{ note.author.username|default:"匿名" }}
+      · {{ note.created_at|date:"Y-m-d H:i" }}
+      · 浏览 {{ note.view_count }}
+    </p>
+
+    <p>
+      {% for tag in note.tags.all %}
+        <span class="tag" style="background:{{ tag.color }}">{{ tag.name }}</span>
+      {% endfor %}
+    </p>
+
+    {# linebreaks：把纯文本的换行转成 <p>/<br>，避免手动拼接 HTML #}
+    <div class="content">{{ note.content|linebreaks }}</div>
+
+    <p style="margin-bottom:0">
+      <a class="btn" href="{% url 'learningnotes:note_edit' note.pk %}">编辑</a>
+      <a class="btn danger" href="{% url 'learningnotes:note_delete' note.pk %}">删除</a>
+    </p>
+  </article>
+
+  {% if related_notes %}
+    <h2>同分类的其他笔记</h2>
+    <ul>
+      {% for r in related_notes %}
+        <li><a href="{{ r.get_absolute_url }}">{{ r.title }}</a></li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endblock %}

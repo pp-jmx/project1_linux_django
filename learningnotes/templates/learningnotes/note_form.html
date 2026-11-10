@@ -1,0 +1,35 @@
+{% extends 'learningnotes/base.html' %}
+{% comment %}
+  note_form.html —— 新建/编辑共用的表单页
+  被这些视图使用：
+    - FBV: views.note_create / views.note_edit（提供 action、可选 note）
+    - CBV: NoteCreateView / NoteUpdateView（不提供 action）
+  上下文：form（必需）/ action（可选）/ note（可选）
+  演示：{% csrf_token %}、逐字段渲染、错误显示
+{% endcomment %}
+
+{% block title %}{{ action|default:"编辑" }}笔记{% endblock %}
+
+{% block content %}
+  <h1>{{ action|default:"编辑" }}笔记</h1>
+
+  <form method="post" class="card">
+    {# CSRF：跨站请求伪造保护，所有 POST 表单都必须加，否则 403 #}
+    {% csrf_token %}
+
+    {# 非字段错误（forms.py 里 self.add_error(None, ...) 产生的） #}
+    {{ form.non_field_errors }}
+
+    {% for field in form %}
+      <div class="field">
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+        {% if field.help_text %}<small class="muted">{{ field.help_text }}</small>{% endif %}
+        {{ field.errors }}
+      </div>
+    {% endfor %}
+
+    <button type="submit">保存</button>
+    {% if note %}<a class="btn" href="{{ note.get_absolute_url }}">取消</a>{% endif %}
+  </form>
+{% endblock %}

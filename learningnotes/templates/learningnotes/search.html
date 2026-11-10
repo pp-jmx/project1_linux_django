@@ -1,0 +1,29 @@
+{% extends 'learningnotes/base.html' %}
+{% comment %}
+  search.html —— 搜索页（CBV: NoteSearchView）
+  上下文：query / notes
+{% endcomment %}
+
+{% block title %}搜索{% endblock %}
+
+{% block content %}
+  <h1>搜索笔记</h1>
+
+  <form method="get" class="filter-bar">
+    <input type="text" name="q" value="{{ query }}" placeholder="按标题/内容/标签搜索">
+    <button type="submit">搜索</button>
+  </form>
+
+  {% if query %}
+    <p class="muted">“{{ query }}” 找到 {{ notes|length }} 条结果</p>
+  {% endif %}
+
+  {% for note in notes %}
+    <article class="card">
+      <h3 style="margin:0"><a href="{{ note.get_absolute_url }}">{{ note.title }}</a></h3>
+      <p class="meta">{{ note.category.name }} · {{ note.created_at|date:"Y-m-d" }}</p>
+    </article>
+  {% empty %}
+    {% if query %}<p class="muted">没有匹配的笔记。</p>{% endif %}
+  {% endfor %}
+{% endblock %}

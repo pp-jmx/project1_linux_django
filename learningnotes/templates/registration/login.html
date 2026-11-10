@@ -1,0 +1,46 @@
+{% extends 'learningnotes/base.html' %}
+{% comment %}
+============================================================================
+  registration/login.html —— 登录页
+============================================================================
+这个文件为什么放在 registration/ 而不是 learningnotes/ 下？
+  因为 django.contrib.auth 的登录视图 (LoginView) 默认去加载
+  'registration/login.html'。项目开启了 APP_DIRS=True，所以
+  learningnotes/templates/registration/login.html 能被自动找到。
+模板上下文：
+  form —— AuthenticationForm（含 username / password 字段，自带校验）
+  next —— 被 @login_required 拦截前想去的地址，登录后应跳回去
+{% endcomment %}
+
+{% block title %}登录{% endblock %}
+
+{% block content %}
+  <h1>登录</h1>
+
+  <form method="post" class="card">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+
+    <div class="field">
+      <label for="{{ form.username.id_for_label }}">用户名</label>
+      {{ form.username }}
+      {{ form.username.errors }}
+    </div>
+
+    <div class="field">
+      <label for="{{ form.password.id_for_label }}">密码</label>
+      {{ form.password }}
+      {{ form.password.errors }}
+    </div>
+
+    {# next：登录成功后跳回原来想访问的页面 #}
+    {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+
+    <button type="submit">登录</button>
+  </form>
+
+  <p class="muted">
+    还没有账号？运行 <code>python manage.py createsuperuser</code>，
+    或用 <code>python manage.py seed_notes</code> 生成演示账号 <code>demo</code> / <code>demo12345</code>。
+  </p>
+{% endblock %}

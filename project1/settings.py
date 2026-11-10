@@ -38,6 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'messageboard.apps.MessageboardConfig',
+    # ↓ 本次补充：注册 learningnotes 应用
+    # 直接写 'learningnotes' 也可以；用 AppConfig 便于后续扩展 verbose_name、ready() 钩子。
+    'learningnotes.apps.LearningnotesConfig',
 ]
 
 MIDDLEWARE = [
@@ -104,9 +107,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'zh-hans'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
@@ -117,6 +120,20 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
+
+# ==================== 媒体文件（用户上传）====================
+# STATIC 存放开发者自己的静态资源（CSS/JS/图片）；
+# MEDIA 存放用户上传的文件，Attachment.file (FileField) 会落到 MEDIA_ROOT。
+MEDIA_URL = 'media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+# ==================== 认证（登录/登出）====================
+# 未登录访问被 @login_required / LoginRequiredMixin 保护的页面时，会跳到 LOGIN_URL。
+# 这三个都支持“命名空间:name”写法，正好对应 learningnotes/urls.py 里 include 的
+# django.contrib.auth.urls（它自带的 view 名就叫 login / logout）。
+LOGIN_URL = 'learningnotes:login'
+LOGIN_REDIRECT_URL = 'learningnotes:index'   # 登录成功后跳转
+LOGOUT_REDIRECT_URL = 'learningnotes:index'  # 登出成功后跳转
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
